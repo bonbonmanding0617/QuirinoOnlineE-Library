@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Quirino Library</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/student-dashboard.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo">
+                <img src="../DO-Quirino-New-Logo-600-x-600.png" alt="Quirino Library Logo" class="logo-img">
+                <span>Quirino Library</span>
+            </div>
+            <div class="nav-right">
+                <button class="btn btn-secondary btn-small logout-btn" onclick="logout()">🚪 Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="student-container">
+        <!-- Sidebar -->
+        <aside class="student-sidebar">
+            <div class="sidebar-user">
+                <img id="user-avatar" src="https://via.placeholder.com/80?text=S" alt="Student">
+                <h3 id="user-name">Student</h3>
+                <p id="user-email">student@example.com</p>
+            </div>
+
+            <nav class="student-nav">
+                <a href="#" onclick="showStudentSection('dashboard')" class="nav-link active">
+                    📊 Dashboard
+                </a>
+                <a href="#" onclick="showStudentSection('browse-books')" class="nav-link">
+                    📚 Browse Books
+                </a>
+                <a href="#" onclick="showStudentSection('borrowed-books')" class="nav-link">
+                    📖 My Borrowed Books
+                </a>
+                <a href="#" onclick="showStudentSection('ebooks')" class="nav-link">
+                    💻 E-Books
+                </a>
+                <a href="#" onclick="showStudentSection('profile')" class="nav-link">
+                    👤 My Profile
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="student-main">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="student-section active">
+                <h1>Welcome Back, <span id="welcome-name">Student</span>! 👋</h1>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-box">
+                        <div class="stat-icon">📚</div>
+                        <div class="stat-info">
+                            <h4>Books Borrowed</h4>
+                            <p id="stat-borrowed" class="big-number">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">📖</div>
+                        <div class="stat-info">
+                            <h4>Books Returned</h4>
+                            <p id="stat-returned" class="big-number">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">⏰</div>
+                        <div class="stat-info">
+                            <h4>Overdue Books</h4>
+                            <p id="stat-overdue" class="big-number">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-info">
+                            <h4>Books in Wishlist</h4>
+                            <p id="stat-wishlist" class="big-number">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-section">
+                    <h2>📝 Recent Activity</h2>
+                    <div id="activity-list" class="activity-list">
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-section">
+                    <h2>⚡ Quick Actions</h2>
+                    <div class="actions-grid">
+                        <button class="action-btn" onclick="showStudentSection('browse-books')">
+                            <span class="action-icon">📚</span>
+                            <span>Browse Books</span>
+                        </button>
+                        <button class="action-btn" onclick="showStudentSection('borrowed-books')">
+                            <span class="action-icon">📖</span>
+                            <span>My Books</span>
+                        </button>
+                        <button class="action-btn" onclick="showStudentSection('ebooks')">
+                            <span class="action-icon">💻</span>
+                            <span>E-Books</span>
+                        </button>
+                        <button class="action-btn" onclick="showStudentSection('profile')">
+                            <span class="action-icon">👤</span>
+                            <span>Profile</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Browse Books Section -->
+            <section id="browse-books" class="student-section">
+                <h1>📚 Browse Books</h1>
+                
+                <div class="search-filter">
+                    <input type="text" id="search-books" placeholder="Search by title or author..." onkeyup="filterBooks()">
+                    <select id="filter-category" onchange="filterBooks()">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+
+                <div class="books-grid" id="books-grid">
+                </div>
+            </section>
+
+            <!-- Borrowed Books Section -->
+            <section id="borrowed-books" class="student-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h1>📖 My Borrowed Books</h1>
+                    <button class="btn btn-primary btn-small" onclick="exportMyBooks()">📥 Export CSV</button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="borrowed-table">
+                        <thead>
+                            <tr>
+                                <th>Book Title</th>
+                                <th>Author</th>
+                                <th>Issued Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Days Left</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- E-Books Section -->
+            <section id="ebooks" class="student-section">
+                <h1>💻 Available E-Books</h1>
+                
+                <div class="ebooks-grid" id="ebooks-grid">
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="student-section">
+                <h1>👤 My Profile</h1>
+                
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <img id="profile-avatar" src="https://via.placeholder.com/150?text=Profile" alt="Profile">
+                        <div class="profile-info">
+                            <h2 id="profile-name">Student Name</h2>
+                            <p id="profile-email">student@example.com</p>
+                            <p id="profile-id">Student ID: STU-2025-001</p>
+                            <p id="profile-joined">Joined: January 1, 2025</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-form">
+                        <h3>Edit Profile</h3>
+                        <form id="student-profile-form">
+                            <div class="form-group">
+                                <label for="edit-name">Full Name</label>
+                                <input type="text" id="edit-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-picture-upload">📸 Upload Profile Picture</label>
+                                <div class="file-upload-container">
+                                    <input type="file" id="profile-picture-upload" accept="image/*" onchange="handleProfilePictureUpload(event)">
+                                    <label for="profile-picture-upload" class="file-upload-label">
+                                        <span>Click to upload or drag & drop</span>
+                                        <small>PNG, JPG, GIF up to 5MB</small>
+                                    </label>
+                                    <div id="upload-progress" class="upload-progress" style="display: none;">
+                                        <div class="progress-bar"></div>
+                                        <span id="upload-status">Uploading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-current-password">Current Password</label>
+                                <input type="password" id="edit-current-password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-new-password">New Password (leave empty to keep current)</label>
+                                <input type="password" id="edit-new-password">
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="updateStudentProfile()">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/features.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/student-dashboard.js"></script>
+    <script src="../js/performance.js"></script>
+    <script src="../js/tests.js"></script>
+</body>
+</html>

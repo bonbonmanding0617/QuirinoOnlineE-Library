@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quirino Online Library Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+    <div class="home-container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <div class="logo">
+                    <img src="DO-Quirino-New-Logo-600-x-600.png" alt="Quirino Library Logo" class="logo-img">
+                    <span>Quirino Library Hub</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to Quirino Online Library</h1>
+                <p>Your gateway to knowledge and academic resources</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="openStudentLogin()">
+                        👤 Student Portal
+                    </button>
+                    <button class="btn btn-secondary" onclick="openAdminLogin()">
+                        👨‍💼 Admin Portal
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="book-icon-large">
+                    <svg viewBox="0 0 200 200" fill="none">
+                        <path d="M50 30L100 50L150 30V170H50V30Z" stroke="#2c3e50" stroke-width="3" fill="#e8f4f8"/>
+                        <path d="M100 50V170" stroke="#2c3e50" stroke-width="2"/>
+                        <circle cx="100" cy="100" r="15" fill="#3498db"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <h2>Why Choose Our Library Hub?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Vast Collection</h3>
+                    <p>Access thousands of books and e-books</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Secure Access</h3>
+                    <p>Your account and data are protected</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Smart Statistics</h3>
+                    <p>Track borrowing patterns and reports</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast & Reliable</h3>
+                    <p>Quick access to all library services</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Quirino Online Library Hub. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Student Login Modal -->
+    <div id="studentLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeStudentLogin()">&times;</span>
+            <h2>Student Login / Sign Up</h2>
+            <div class="form-container">
+                <div class="form-tabs">
+                    <button class="tab-btn active" onclick="switchTab('student-login')">Login</button>
+                    <button class="tab-btn" onclick="switchTab('student-signup')">Create Account</button>
+                </div>
+                
+                <!-- Student Login Form -->
+                <form id="student-login" class="tab-content active">
+                    <div class="form-group">
+                        <label for="student-email">Email Address</label>
+                        <input type="email" id="student-email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-password">Password</label>
+                        <input type="password" id="student-password" placeholder="Enter password" required>
+                    </div>
+                    <button type="button" class="btn btn-primary w-100" onclick="loginStudent()">Login</button>
+                    <p class="form-hint">Test: email@student.com / password</p>
+                </form>
+
+                <!-- Student Signup Form -->
+                <form id="student-signup" class="tab-content">
+                    <div class="form-group">
+                        <label for="student-name">Full Name</label>
+                        <input type="text" id="student-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-signup-email">Email Address</label>
+                        <input type="email" id="student-signup-email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-id">Student ID</label>
+                        <input type="text" id="student-id" placeholder="STU-2025-001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-profile-picture-upload">📸 Upload Profile Picture</label>
+                        <div class="file-upload-container">
+                            <input type="file" id="signup-profile-picture-upload" accept="image/*" onchange="handleSignupProfilePictureUpload(event)">
+                            <label for="signup-profile-picture-upload" class="file-upload-label">
+                                <span>Click to upload</span>
+                                <small>PNG, JPG, GIF up to 5MB</small>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-signup-password">Password</label>
+                        <input type="password" id="student-signup-password" placeholder="Create password" required>
+                    </div>
+                    <button type="button" class="btn btn-primary w-100" onclick="signupStudent()">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin/Teacher Login Modal -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdminLogin()">&times;</span>
+            <h2>Admin / Teacher Portal</h2>
+            <form id="admin-login" class="form-container">
+                <div class="form-group">
+                    <label for="admin-email">Email Address</label>
+                    <input type="email" id="admin-email" placeholder="admin@library.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" placeholder="Enter password" required>
+                </div>
+                <button type="button" class="btn btn-primary w-100" onclick="loginAdmin()">Login</button>
+                <p class="form-hint">Test: admin@library.com / admin123</p>
+                <p class="form-hint" style="color: #e74c3c;">No account creation for Admin/Teacher</p>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>

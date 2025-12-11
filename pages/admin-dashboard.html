@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Quirino Library</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../DO-Quirino-New-Logo-600-x-600.png" alt="Quirino Logo" class="sidebar-logo">
+                <span>Admin Panel</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <!-- Quick Actions -->
+                <div class="nav-section">
+                    <h4>⚡ Quick Actions</h4>
+                    <a href="#" onclick="showSection('quick-actions')" class="nav-link active">Quick Actions</a>
+                </div>
+
+                <!-- Student Management -->
+                <div class="nav-section">
+                    <h4>👥 Student Management</h4>
+                    <a href="#" onclick="showSection('manage-students')" class="nav-link">Manage Students</a>
+                </div>
+
+                <!-- Book Management -->
+                <div class="nav-section">
+                    <h4>📚 Book Management</h4>
+                    <a href="#" onclick="showSection('manage-books')" class="nav-link">Manage Books</a>
+                    <a href="#" onclick="showSection('manage-categories')" class="nav-link">Manage Categories</a>
+                </div>
+
+                <!-- Book Operations -->
+                <div class="nav-section">
+                    <h4>📋 Issue/Return Books</h4>
+                    <a href="#" onclick="showSection('issue-books')" class="nav-link">Issue Books</a>
+                    <a href="#" onclick="showSection('return-books')" class="nav-link">Return Books</a>
+                    <a href="#" onclick="showSection('reset-returned')" class="nav-link">Reset Book Returned</a>
+                </div>
+
+                <!-- E-Books Management -->
+                <div class="nav-section">
+                    <h4>📖 E-Books Management</h4>
+                    <a href="#" onclick="showSection('publish-ebook')" class="nav-link">Publish E-Book</a>
+                    <a href="#" onclick="showSection('approve-ebooks')" class="nav-link">Approve E-Books</a>
+                </div>
+
+                <!-- Reports & Analytics -->
+                <div class="nav-section">
+                    <h4>📊 Reports & Analytics</h4>
+                    <a href="#" onclick="showSection('borrow-notifications')" class="nav-link">Borrow Notifications</a>
+                    <a href="#" onclick="showSection('view-reports')" class="nav-link">View Reports</a>
+                    <a href="#" onclick="showSection('library-statistics')" class="nav-link">Library Statistics</a>
+                </div>
+
+                <!-- Admin Tools -->
+                <div class="nav-section">
+                    <h4>⚙️ Admin Tools</h4>
+                    <a href="#" onclick="showSection('email-system')" class="nav-link">Test Email System</a>
+                    <a href="#" onclick="showSection('create-admin')" class="nav-link">Create Admin Account</a>
+                    <a href="#" onclick="showSection('manage-admins')" class="nav-link">Manage Admin Accounts</a>
+                </div>
+
+                <!-- Account -->
+                <div class="nav-section">
+                    <h4>👤 Account</h4>
+                    <a href="#" onclick="showSection('edit-profile')" class="nav-link">Edit Profile</a>
+                    <a href="#" onclick="logout()" class="nav-link danger logout-btn">🚪 Logout</a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                    <h1 id="page-title">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <img id="header-avatar" src="https://via.placeholder.com/40?text=A" alt="User">
+                        <div>
+                            <p id="header-name">Admin</p>
+                            <p id="header-role">Super Admin</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-area">
+
+                <!-- Quick Actions -->
+                <section id="quick-actions" class="section active">
+                    <h2>⚡ Quick Actions</h2>
+                    <div class="actions-grid">
+                        <div class="action-card">
+                            <h3>📚 Issue a Book</h3>
+                            <p>Quickly issue a book to a student</p>
+                            <button class="btn btn-primary" onclick="showSection('issue-books')">Go</button>
+                        </div>
+                        <div class="action-card">
+                            <h3>📖 Return a Book</h3>
+                            <p>Process book returns</p>
+                            <button class="btn btn-primary" onclick="showSection('return-books')">Go</button>
+                        </div>
+                        <div class="action-card">
+                            <h3>👥 Add New Student</h3>
+                            <p>Register a new student</p>
+                            <button class="btn btn-primary" onclick="showAddStudentForm()">Go</button>
+                        </div>
+                        <div class="action-card">
+                            <h3>📚 Add New Book</h3>
+                            <p>Add a book to the library</p>
+                            <button class="btn btn-primary" onclick="showAddBookForm()">Go</button>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Overview -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-content">
+                                <h4>Total Books</h4>
+                                <p id="stat-books" class="stat-number">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-content">
+                                <h4>Total Students</h4>
+                                <p id="stat-students" class="stat-number">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔄</div>
+                            <div class="stat-content">
+                                <h4>Borrowed Today</h4>
+                                <p id="stat-today" class="stat-number">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-content">
+                                <h4>Pending Returns</h4>
+                                <p id="stat-pending" class="stat-number">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Manage Students -->
+                <section id="manage-students" class="section">
+                    <div class="section-header">
+                        <h2>👥 Manage Students</h2>
+                        <button class="btn btn-primary" onclick="showAddStudentForm()">+ Add Student</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="students-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Books Borrowed</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Manage Books -->
+                <section id="manage-books" class="section">
+                    <div class="section-header">
+                        <h2>📚 Manage Books</h2>
+                        <button class="btn btn-primary" onclick="showAddBookForm()">+ Add Book</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="books-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Category</th>
+                                    <th>ISBN</th>
+                                    <th>Total Copies</th>
+                                    <th>Available</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Manage Categories -->
+                <section id="manage-categories" class="section">
+                    <div class="section-header">
+                        <h2>📂 Manage Categories</h2>
+                        <button class="btn btn-primary" onclick="showAddCategoryForm()">+ Add Category</button>
+                    </div>
+                    <div class="categories-grid" id="categories-grid">
+                    </div>
+                </section>
+
+                <!-- Issue Books -->
+                <section id="issue-books" class="section">
+                    <h2>📋 Issue Books to Students</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="issue-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="issue-student">Select Student <span class="required">*</span></label>
+                                        <input type="text" id="student-search" placeholder="Search by name or email" class="search-input" oninput="filterStudentDropdown()">
+                                        <select id="issue-student" required>
+                                            <option value="">Choose a student</option>
+                                        </select>
+                                        <div id="student-info" class="info-box" style="display:none;"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="issue-book">Select Book <span class="required">*</span></label>
+                                        <input type="text" id="book-search" placeholder="Search by title or ISBN" class="search-input" oninput="filterBookDropdown()">
+                                        <select id="issue-book" required onchange="showBookInfo()">
+                                            <option value="">Choose a book</option>
+                                        </select>
+                                        <div id="book-info" class="info-box" style="display:none;"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="issue-date">Issue Date <span class="required">*</span></label>
+                                        <input type="date" id="issue-date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="due-date">Due Date <span class="required">*</span></label>
+                                        <input type="date" id="due-date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="issue-quantity">Quantity <span class="required">*</span></label>
+                                        <input type="number" id="issue-quantity" min="1" max="10" value="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="issue-notes">Notes (Optional)</label>
+                                        <input type="text" id="issue-notes" placeholder="Add any notes...">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-success" onclick="issueBook()">✓ Issue Book</button>
+                                    <button type="reset" class="btn btn-secondary" onclick="clearIssueForm()">Clear Form</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Issued Books Summary -->
+                    <div class="card" style="margin-top: 20px;">
+                        <div class="card-header">
+                            <h3>📚 Recently Issued Books</h3>
+                        </div>
+                        <div class="table-container">
+                            <table id="issued-books-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Book</th>
+                                        <th>Issued Date</th>
+                                        <th>Due Date</th>
+                                        <th>Qty</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Return Books -->
+                <section id="return-books" class="section">
+                    <h2>📖 Return Books</h2>
+                    <div class="table-container">
+                        <table id="borrowed-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Book</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Reset Returned Books -->
+                <section id="reset-returned" class="section">
+                    <h2>🔄 Reset Returned Books</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Manage and reset book return records.</p>
+                            <button class="btn btn-warning" onclick="resetReturnedBooks()">Reset All Records</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Publish E-Book -->
+                <section id="publish-ebook" class="section">
+                    <h2>📖 Publish E-Book</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="ebook-form">
+                                <div class="form-group">
+                                    <label for="ebook-title">Title</label>
+                                    <input type="text" id="ebook-title" placeholder="E-Book Title" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ebook-author">Author</label>
+                                    <input type="text" id="ebook-author" placeholder="Author Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ebook-category">Category</label>
+                                    <input type="text" id="ebook-category" placeholder="Category" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ebook-file">Upload File (PDF/EPUB)</label>
+                                    <input type="file" id="ebook-file" accept=".pdf,.epub" required>
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="publishEbook()">Publish E-Book</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Approve E-Books -->
+                <section id="approve-ebooks" class="section">
+                    <h2>✅ Approve E-Books</h2>
+                    <div class="table-container">
+                        <table id="ebooks-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Borrow Notifications -->
+                <section id="borrow-notifications" class="section">
+                    <h2>📬 Borrow Notifications</h2>
+                    <div id="notifications-list">
+                    </div>
+                </section>
+
+                <!-- View Reports -->
+                <section id="view-reports" class="section">
+                    <h2>📊 View Reports</h2>
+                    <div class="reports-container">
+                        <div class="report-card">
+                            <h3>Borrowing Report</h3>
+                            <canvas id="borrowing-chart"></canvas>
+                        </div>
+                        <div class="report-card">
+                            <h3>Category Distribution</h3>
+                            <canvas id="category-chart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Library Statistics -->
+                <section id="library-statistics" class="section">
+                    <h2>📈 Library Statistics</h2>
+                    <div class="stats-detailed-grid">
+                        <div class="stat-detailed-card">
+                            <h4>Today's Borrowing</h4>
+                            <p id="stats-today-borrow" class="stat-large-number">0</p>
+                        </div>
+                        <div class="stat-detailed-card">
+                            <h4>This Week</h4>
+                            <p id="stats-week-borrow" class="stat-large-number">0</p>
+                        </div>
+                        <div class="stat-detailed-card">
+                            <h4>This Month</h4>
+                            <p id="stats-month-borrow" class="stat-large-number">0</p>
+                        </div>
+                        <div class="stat-detailed-card">
+                            <h4>This Year</h4>
+                            <p id="stats-year-borrow" class="stat-large-number">0</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Test Email System -->
+                <section id="email-system" class="section">
+                    <h2>📧 Test Email System</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="email-form">
+                                <div class="form-group">
+                                    <label for="test-email">Recipient Email</label>
+                                    <input type="email" id="test-email" placeholder="test@example.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="test-subject">Subject</label>
+                                    <input type="text" id="test-subject" placeholder="Test Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="test-message">Message</label>
+                                    <textarea id="test-message" placeholder="Test message" rows="5" required></textarea>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="sendTestEmail()">Send Test Email</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create Admin Account -->
+                <section id="create-admin" class="section">
+                    <h2>➕ Create Admin Account</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="create-admin-form">
+                                <div class="form-group">
+                                    <label for="new-admin-name">Name</label>
+                                    <input type="text" id="new-admin-name" placeholder="Admin Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-admin-email">Email</label>
+                                    <input type="email" id="new-admin-email" placeholder="admin@library.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-admin-password">Password</label>
+                                    <input type="password" id="new-admin-password" placeholder="Create password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-admin-role">Role</label>
+                                    <select id="new-admin-role" required>
+                                        <option value="admin">Admin</option>
+                                        <option value="teacher">Teacher</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="createAdminAccount()">Create Account</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Manage Admin Accounts -->
+                <section id="manage-admins" class="section">
+                    <h2>👨‍💼 Manage Admin Accounts</h2>
+                    <div class="table-container">
+                        <table id="admins-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Edit Profile -->
+                <section id="edit-profile" class="section">
+                    <h2>✏️ Edit Profile</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="profile-form">
+                                <div class="form-group">
+                                    <label for="profile-name">Name</label>
+                                    <input type="text" id="profile-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-email">Email</label>
+                                    <input type="email" id="profile-email" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-profile-picture-upload">📸 Upload Profile Picture</label>
+                                    <div class="file-upload-container">
+                                        <input type="file" id="admin-profile-picture-upload" accept="image/*" onchange="handleAdminProfilePictureUpload(event)">
+                                        <label for="admin-profile-picture-upload" class="file-upload-label">
+                                            <span>Click to upload or drag & drop</span>
+                                            <small>PNG, JPG, GIF up to 5MB</small>
+                                        </label>
+                                        <div id="admin-upload-progress" class="upload-progress" style="display: none;">
+                                            <div class="progress-bar"></div>
+                                            <span id="admin-upload-status">Uploading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="current-password">Current Password</label>
+                                    <input type="password" id="current-password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-password">New Password (leave empty to keep current)</label>
+                                    <input type="password" id="new-password">
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="updateProfile()">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Forms Modal -->
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeFormModal()">&times;</span>
+            <div id="formModalContent"></div>
+        </div>
+    </div>
+
+    <!-- Student Form Modal -->
+    <div id="studentFormModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close" onclick="closeStudentModal()">&times;</span>
+            <h2 id="studentModalTitle">Add Student</h2>
+            <form id="studentForm">
+                <div class="form-group">
+                    <label for="form-student-name">Full Name *</label>
+                    <input type="text" id="form-student-name" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-student-email">Email *</label>
+                    <input type="email" id="form-student-email" placeholder="student@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-student-id">Student ID *</label>
+                    <input type="text" id="form-student-id" placeholder="STU-2025-001" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-student-password">Password *</label>
+                    <input type="password" id="form-student-password" placeholder="Create password" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-student-phone">Phone</label>
+                    <input type="tel" id="form-student-phone" placeholder="Phone number">
+                </div>
+                <button type="button" class="btn btn-success" onclick="saveStudent()">Save Student</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Book Form Modal -->
+    <div id="bookFormModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close" onclick="closeBookModal()">&times;</span>
+            <h2 id="bookModalTitle">Add Book</h2>
+            <form id="bookForm">
+                <div class="form-group">
+                    <label for="form-book-title">Title *</label>
+                    <input type="text" id="form-book-title" placeholder="Book Title" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-book-author">Author *</label>
+                    <input type="text" id="form-book-author" placeholder="Author Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-book-isbn">ISBN *</label>
+                    <input type="text" id="form-book-isbn" placeholder="ISBN-10 or ISBN-13" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-book-category">Category *</label>
+                    <input type="text" id="form-book-category" placeholder="Fiction, Science, etc." required>
+                </div>
+                <div class="form-group">
+                    <label for="form-book-quantity">Total Copies *</label>
+                    <input type="number" id="form-book-quantity" placeholder="5" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-book-cover">Cover URL</label>
+                    <input type="url" id="form-book-cover" placeholder="https://example.com/cover.jpg">
+                </div>
+                <button type="button" class="btn btn-success" onclick="saveBook()">Save Book</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Category Form Modal -->
+    <div id="categoryFormModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <span class="close" onclick="closeCategoryModal()">&times;</span>
+            <h2>Add Category</h2>
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label for="form-category-name">Category Name *</label>
+                    <input type="text" id="form-category-name" placeholder="Enter category name" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-category-description">Description</label>
+                    <textarea id="form-category-description" placeholder="Category description" rows="3"></textarea>
+                </div>
+                <button type="button" class="btn btn-success" onclick="saveCategory()">Add Category</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/features.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/performance.js"></script>
+    <script src="../js/tests.js"></script>
+</body>
+</html>

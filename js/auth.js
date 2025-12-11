@@ -97,12 +97,12 @@ function loginStudent() {
     const password = document.getElementById('student-password').value;
 
     if (!email || !password) {
-        UIHelper.showError('Please fill all fields');
+        alert('Please fill all fields');
         return;
     }
 
-    if (!FormValidator.isEmail(email)) {
-        UIHelper.showError('Invalid email format');
+    if (!email.includes('@')) {
+        alert('Invalid email format');
         return;
     }
 
@@ -114,11 +114,10 @@ function loginStudent() {
             ...student,
             userType: 'student'
         }));
-        logActivity('Student Login', { email });
         closeStudentLogin();
         window.location.href = 'pages/student-dashboard.html';
     } else {
-        UIHelper.showError('Invalid email or password');
+        alert('Invalid email or password\n\nTest Credentials:\nEmail: email@student.com\nPassword: password');
     }
 }
 
@@ -130,34 +129,34 @@ function signupStudent() {
     const password = document.getElementById('student-signup-password').value;
 
     if (!name || !email || !studentId || !password) {
-        UIHelper.showError('Please fill all fields');
+        alert('Please fill all fields');
         return;
     }
 
-    if (!FormValidator.isValidName(name)) {
-        UIHelper.showError('Name must be at least 2 characters');
+    if (name.length < 2) {
+        alert('Name must be at least 2 characters');
         return;
     }
 
-    if (!FormValidator.isEmail(email)) {
-        UIHelper.showError('Invalid email address');
+    if (!email.includes('@')) {
+        alert('Invalid email address');
         return;
     }
 
-    if (!FormValidator.isValidStudentId(studentId)) {
-        UIHelper.showError('Student ID must be at least 3 characters');
+    if (studentId.length < 3) {
+        alert('Student ID must be at least 3 characters');
         return;
     }
 
-    if (!FormValidator.isStrongPassword(password)) {
-        UIHelper.showError('Password must be at least 6 characters');
+    if (password.length < 6) {
+        alert('Password must be at least 6 characters');
         return;
     }
 
     const students = JSON.parse(localStorage.getItem('students') || '[]');
     
     if (students.find(s => s.email === email)) {
-        UIHelper.showError('Email already exists');
+        alert('Email already exists');
         return;
     }
 
@@ -174,7 +173,7 @@ function signupStudent() {
     students.push(newStudent);
     localStorage.setItem('students', JSON.stringify(students));
 
-    UIHelper.showSuccess('Account created successfully! Please login.');
+    alert('Account created successfully! Please login.');
     
     setTimeout(() => {
         document.getElementById('student-name').value = '';
@@ -193,12 +192,12 @@ function loginAdmin() {
     const password = document.getElementById('admin-password').value;
 
     if (!email || !password) {
-        UIHelper.showError('Please fill all fields');
+        alert('Please fill all fields');
         return;
     }
 
-    if (!FormValidator.isEmail(email)) {
-        UIHelper.showError('Invalid email format');
+    if (!email.includes('@')) {
+        alert('Invalid email format');
         return;
     }
 
@@ -210,11 +209,10 @@ function loginAdmin() {
             ...admin,
             userType: 'admin'
         }));
-        logActivity('Admin Login', { email, role: admin.role });
         closeAdminLogin();
         window.location.href = 'pages/admin-dashboard.html';
     } else {
-        UIHelper.showError('Invalid email or password');
+        alert('Invalid email or password\n\nTest Credentials:\nEmail: admin@library.com\nPassword: admin123\n\nOr:\nEmail: teacher@library.com\nPassword: admin123');
     }
 }
 
@@ -222,46 +220,50 @@ function loginAdmin() {
 function logout() {
     // Show confirmation dialog
     if (confirm('Are you sure you want to logout?')) {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        
-        // Log logout activity before clearing session
-        if (currentUser) {
-            logActivity('User Logout', { 
-                user: currentUser.name, 
-                email: currentUser.email,
-                role: currentUser.role,
-                userType: currentUser.userType,
-                logoutTime: new Date().toISOString()
-            });
-        }
-        
-        // Clear ALL session-related data
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('sessionStartTime');
-        localStorage.removeItem('lastActivity');
-        localStorage.removeItem('sessionUpdated');
-        localStorage.removeItem('signupProfilePictureData');
-        
-        // Clear any session storage
-        if (sessionStorage) {
+        try {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            // Log logout activity before clearing session
+            if (currentUser) {
+                const activityLog = JSON.parse(localStorage.getItem('activityLog') || '[]');
+                activityLog.push({
+                    timestamp: new Date().toISOString(),
+                    user: currentUser.name,
+                    action: 'User Logout',
+                    details: {
+                        email: currentUser.email,
+                        role: currentUser.role,
+                        userType: currentUser.userType
+                    }
+                });
+                localStorage.setItem('activityLog', JSON.stringify(activityLog));
+            }
+            
+            // Clear ALL session-related data
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('sessionStartTime');
+            localStorage.removeItem('lastActivity');
+            localStorage.removeItem('sessionUpdated');
+            localStorage.removeItem('signupProfilePictureData');
+            
+            // Clear session storage
             sessionStorage.clear();
-        }
-        
-        // Clear any form data
-        const forms = document.querySelectorAll('form');
-        forms.forEach(form => form.reset());
-        
-        // Show logout message
-        UIHelper.showSuccess('You have been logged out successfully!');
-        
-        // Redirect to home page after a short delay
-        setTimeout(() => {
-            // Force page reload to clear all page state
+            
+            // Show alert before redirect
+            alert('You have been logged out successfully!');
+            
+            // Redirect to home page
             window.location.href = '../index.html';
-            window.location.reload(true); // Force hard reload
-        }, 1000);
+            
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Force logout even if there's an error
+            localStorage.clear();
+            sessionStorage.clear();
+            alert('Logged out. Redirecting to home...');
+            window.location.href = '../index.html';
+        }
     }
-}
 }
 
 // Log Activity

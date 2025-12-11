@@ -185,7 +185,10 @@
                 <section id="manage-books" class="section">
                     <div class="section-header">
                         <h2>📚 Manage Books</h2>
-                        <button class="btn btn-primary" onclick="showAddBookForm()">+ Add Book</button>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="showAddBookForm()">+ Add Book</button>
+                            <button class="btn btn-secondary" onclick="showImportBooksForm()">📥 Import Books</button>
+                        </div>
                     </div>
                     <div class="table-container">
                         <table id="books-table">
@@ -624,6 +627,24 @@
                     <textarea id="form-category-description" placeholder="Category description" rows="3"></textarea>
                 </div>
                 <button type="button" class="btn btn-success" onclick="saveCategory()">Add Category</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Import Books Modal -->
+    <div id="importBooksModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeImportBooksModal()">&times;</span>
+            <h2>📥 Import Books</h2>
+            <form id="import-books-form">
+                <div class="form-group">
+                    <label for="import-csv">Paste CSV Data (Title, Author, Category, ISBN, Quantity)</label>
+                    <textarea id="import-csv" placeholder="Example:&#10;The Great Gatsby, F. Scott Fitzgerald, Fiction, 978-0743273565, 5&#10;To Kill a Mockingbird, Harper Lee, Fiction, 978-0061120084, 3" rows="10" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn btn-success" onclick="importBooksFromCSV()">Import Books</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeImportBooksModal()">Cancel</button>
+                </div>
             </form>
         </div>
     </div>

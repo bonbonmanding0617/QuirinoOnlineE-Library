@@ -1283,3 +1283,98 @@ function handleAdminProfilePictureUpload(event) {
     reader.readAsDataURL(file);
 }
 
+// Show Import Books Modal
+function showImportBooksForm() {
+    document.getElementById('importBooksModal').style.display = 'block';
+    document.getElementById('import-csv').value = '';
+}
+
+// Close Import Books Modal
+function closeImportBooksModal() {
+    document.getElementById('importBooksModal').style.display = 'none';
+}
+
+// Import Books from CSV
+function importBooksFromCSV() {
+    const csvData = document.getElementById('import-csv').value.trim();
+    
+    if (!csvData) {
+        alert('Please enter CSV data');
+        return;
+    }
+    
+    const books = JSON.parse(localStorage.getItem('books') || '[]');
+    const lines = csvData.split('\n').filter(line => line.trim());
+    
+    let importedCount = 0;
+    let errors = [];
+    
+    lines.forEach((line, index) => {
+        try {
+            const parts = line.split(',').map(p => p.trim());
+            
+            if (parts.length < 5) {
+                errors.push(`Row ${index + 1}: Missing fields. Required: Title, Author, Category, ISBN, Quantity`);
+                return;
+            }
+            
+            const [title, author, category, isbn, quantityStr] = parts;
+            const quantity = parseInt(quantityStr);
+            
+            if (!title || !author || !category || !isbn || isNaN(quantity)) {
+                errors.push(`Row ${index + 1}: Invalid data format`);
+                return;
+            }
+            
+            // Check if book with same ISBN already exists
+            if (books.find(b => b.isbn === isbn)) {
+                errors.push(`Row ${index + 1}: ISBN ${isbn} already exists in system`);
+                return;
+            }
+            
+            // Add new book
+            const newBook = {
+                id: Date.now().toString() + '_' + index,
+                title,
+                author,
+                category,
+                isbn,
+                quantity,
+                available: quantity,
+                coverUrl: 'https://via.placeholder.com/150?text=' + encodeURIComponent(title.substring(0, 20))
+            };
+            
+            books.push(newBook);
+            importedCount++;
+            
+        } catch (err) {
+            errors.push(`Row ${index + 1}: Error parsing - ${err.message}`);
+        }
+    });
+    
+    // Save updated books
+    localStorage.setItem('books', JSON.stringify(books));
+    
+    // Show results
+    let message = `✓ Successfully imported ${importedCount} books!`;
+    if (errors.length > 0) {
+        message += `\n\n⚠️ ${errors.length} errors:\n` + errors.join('\n');
+        alert(message);
+    } else {
+        alert(message);
+    }
+    
+    // Reload books table
+    loadBooksTable();
+    closeImportBooksModal();
+}
+
+// Close modals on outside click
+window.addEventListener('click', function(event) {
+    const importModal = document.getElementById('importBooksModal');
+    if (event.target === importModal) {
+        importModal.style.display = 'none';
+    }
+});
+
+
